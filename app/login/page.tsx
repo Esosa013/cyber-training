@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MOCK_USERS } from '@/components/data/constant';
+import { useSignIn } from '@clerk/nextjs';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -10,36 +10,42 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { signIn, isLoaded: clerkLoaded } = useSignIn();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsLoading(true);
     
-    // Simulate loading
-    setTimeout(() => {
-      // Find user with matching email
-      const user = MOCK_USERS.find(user => user.email === email);
+    if (!clerkLoaded) {
+      setError('Authentication system is loading. Please try again.');
+      setIsLoading(false);
+      return;
+    }
+    
+    try {
+      // Start the sign-in process with email
+      const result = await signIn.create({
+        identifier: email,
+        password,
+      });
       
-      if (!user) {
-        setError('User not found. Please check your email.');
-        setIsLoading(false);
-        return;
+      // Check if the sign-in requires multi-factor authentication
+      if (result.status === "complete") {
+        // Sign in was successful, redirect to the dashboard
+        router.push('/dashboard');
+      } else {
+        // Sign in requires MFA or other verification steps
+        // Handle additional verification steps here
+        // For now, we'll just forward to the next step in the Clerk flow
+        router.push("/sign-in/" + result.createdSessionId);
       }
-      
-      // Check password
-      if (user.password !== password) {
-        setError('Incorrect password. Please try again.');
-        setIsLoading(false);
-        return;
-      }
-      
-      // Set the active user in localStorage (optional)
-      localStorage.setItem('activeUserId', user.id);
-      
-      // Redirect to dashboard
-      router.push('/dashboard');
-    }, 1000);
+    } catch (err: any) {
+      // Handle sign-in errors
+      console.error('Sign in error:', err);
+      setError(err.errors?.[0]?.message || 'Failed to sign in. Please check your credentials.');
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -116,7 +122,7 @@ export default function LoginPage() {
             
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !clerkLoaded}
               className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 rounded-lg py-3 px-4 text-white font-semibold shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 transition-all duration-300 disabled:opacity-70"
             >
               {isLoading ? (
@@ -130,7 +136,7 @@ export default function LoginPage() {
             </button>
             
             <div className="mt-6 text-center">
-              <a href="#" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">
+              <a href="/forgot-password" className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors">
                 Forgot password?
               </a>
             </div>
@@ -138,7 +144,7 @@ export default function LoginPage() {
           
           <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-center">
             <div className="text-xs text-gray-400">
-              New recruit? <a href="#" className="text-cyan-400 hover:text-cyan-300 transition-colors">Register for training</a>
+              New recruit? <a href="/sign-up" className="text-cyan-400 hover:text-cyan-300 transition-colors">Register for training</a>
             </div>
           </div>
         </div>

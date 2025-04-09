@@ -31,7 +31,8 @@ export default function Home() {
           <a href="#pricing" className="hover:text-cyan-400 transition-colors">Pricing</a>
         </nav>
         <button
-          onClick={() => router.push(user ? '/dashboard' : '/sign-in')}
+          disabled={!user}
+          onClick={() => router.push('/dashboard')}
           className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 rounded-lg font-medium transition-colors backdrop-blur-sm"
         >
           {user ? 'Dashboard' : 'Sign In'}
@@ -328,7 +329,8 @@ export default function Home() {
             </p>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <button
-                onClick={() => router.push(user ? '/dashboard' : '/sign-in')}
+                onClick={() => router.push('/dashboard')}
+                disabled={!user}
                 className="px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-full text-xl font-semibold shadow-lg hover:from-cyan-600 hover:to-blue-600 transition-all duration-300"
               >
                 Get Started Now

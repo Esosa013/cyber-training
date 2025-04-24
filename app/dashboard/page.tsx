@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@clerk/nextjs';
 import useDashboard from './useDashboard';
 import { Shield } from 'lucide-react';
+import SidebarMenu from '@/components/sideBarMenu';
 
 export default function Dashboard() {
   const {
@@ -73,39 +74,53 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="container mx-auto p-4 md:p-6 relative">
-        <ProgressOverview
-          level={activeUser.level}
-          points={activeUser.points}
-          earnedBadgesCount={earnedBadges.length}
-          totalBadgesCount={MOCK_BADGES.length}
-          completedScenarios={completedCount}
-          totalScenarios={allScenarios.length}
-        />
+      {/* Main content with sidebar layout */}
+      <div className="container mx-auto p-4 md:p-6 relative">
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar */}
+          <div className="lg:w-64 flex-shrink-0">
+            <SidebarMenu 
+              scenarioOptions={scenarioOptions}
+              scenarioFilter={scenarioFilter}
+              setScenarioFilter={setScenarioFilter}
+            />
+          </div>
+          
+          {/* Main content */}
+          <div className="flex-grow">
+            <ProgressOverview
+              level={activeUser.level}
+              points={activeUser.points}
+              earnedBadgesCount={earnedBadges.length}
+              totalBadgesCount={MOCK_BADGES.length}
+              completedScenarios={completedCount}
+              totalScenarios={allScenarios.length}
+            />
 
-        <ScenariosSection
-          scenarioOptions={scenarioOptions}
-          scenarioFilter={scenarioFilter}
-          setScenarioFilter={setScenarioFilter}
-          showCompletedOnly={showCompletedOnly}
-          setShowCompletedOnly={setShowCompletedOnly}
-          filteredScenarios={filteredScenarios}
-          MOCK_BADGES={MOCK_BADGES}
-        />
+            <ScenariosSection
+              scenarioOptions={scenarioOptions}
+              scenarioFilter={scenarioFilter}
+              setScenarioFilter={setScenarioFilter}
+              showCompletedOnly={showCompletedOnly}
+              setShowCompletedOnly={setShowCompletedOnly}
+              filteredScenarios={filteredScenarios}
+              MOCK_BADGES={MOCK_BADGES}
+            />
 
-        <BadgesSection
-          earnedBadges={earnedBadges}
-          allBadges={MOCK_BADGES}
-          userBadgeIds={activeUser.badges}
-        />
+            <BadgesSection
+              earnedBadges={earnedBadges}
+              allBadges={MOCK_BADGES}
+              userBadgeIds={activeUser.badges}
+            />
 
-        {/* Pass allUsers to Leaderboard */}
-        <Leaderboard
-          users={allUsers} // Use the fetched users here
-          activeUserId={activeUser.id}
-          getUserAvatar={getUserAvatar}
-        />
-      </main>
+            <Leaderboard
+              users={allUsers}
+              activeUserId={activeUser.id}
+              getUserAvatar={getUserAvatar}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

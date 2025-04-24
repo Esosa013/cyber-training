@@ -35,7 +35,7 @@ export default function Home() {
           onClick={() => router.push('/dashboard')}
           className="px-4 py-2 text-sm bg-white/10 hover:bg-white/20 rounded-lg font-medium transition-colors backdrop-blur-sm"
         >
-          {user ? 'Dashboard' : 'Sign In'}
+          Dashboard
         </button>
       </header>
 

@@ -41,7 +41,7 @@ export default function ScenariosSection({
           All Scenarios
         </h2>
 
-        <div className="flex flex-wrap gap-2">
+        {/* <div className="flex flex-wrap gap-2">
           {scenarioOptions.map(({ label, value }) => (
             <button
               key={value}
@@ -51,7 +51,7 @@ export default function ScenariosSection({
               {label}
             </button>
           ))}
-        </div>
+        </div> */}
 
         <div className="flex items-center space-x-2">
           <button

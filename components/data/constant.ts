@@ -42,7 +42,7 @@ export interface User {
     id: string;
     title: string;
     description: string;
-    category: 'phishing' | 'social' | 'data-protection' | 'network-security' | 'device-security' | 'physical-security' | 'remote-security' | 'application-security' | 'third-party-risk' | 'incident-response';
+    category: 'phishing' | 'social' | 'data-protection' | 'network-security' | 'device-security' | 'physical-security' | 'remote-security' | 'application-security' | 'third-party-risk' | 'incident-response' | 'hardware and software';
     difficulty: 'beginner' | 'intermediate' | 'advanced';
     points: number;
     estimatedTime: number; // in minutes
@@ -833,7 +833,70 @@ export interface User {
           ]
         }
       ]
+    },
+    {
+  id: 'scenario2',
+  title: 'Outdated Software Risk',
+  description: 'Understand the risks of using outdated software and learn how to maintain secure hardware and software systems.',
+  category: 'hardware and software',
+  difficulty: 'beginner',
+  points: 100,
+  estimatedTime: 10,
+  badge: 'hardware-software-novice',
+  steps: [
+    {
+      id: 'step1',
+      title: 'Outdated Application Alert',
+      description: 'You receive a notification that a frequently used software on your workstation is outdated. What should you do first?',
+      image: '/assets/scenarios/outdated-software.png',
+      options: [
+        {
+          id: 'option1',
+          text: 'Ignore the update and continue using the software',
+          isCorrect: false,
+          explanation: 'Outdated software may have unpatched vulnerabilities that can be exploited by attackers.'
+        },
+        {
+          id: 'option2',
+          text: 'Update the software using the official update channel',
+          isCorrect: true,
+          explanation: 'Correct! Always update software using official sources to ensure security patches are applied.'
+        },
+        {
+          id: 'option3',
+          text: 'Download a newer version from a third-party website',
+          isCorrect: false,
+          explanation: 'Downloading from unofficial sources can lead to installing malicious or tampered software.'
+        }
+      ]
+    },
+    {
+      id: 'step2',
+      title: 'Hardware Inspection',
+      description: 'Your laptop is running slower than usual, and you suspect a hardware issue. What’s a responsible next step?',
+      options: [
+        {
+          id: 'option1',
+          text: 'Open the device and replace components yourself',
+          isCorrect: false,
+          explanation: 'Unless you are trained and authorized, opening hardware can void warranties and cause damage.'
+        },
+        {
+          id: 'option2',
+          text: 'Report the issue to IT support for diagnosis',
+          isCorrect: true,
+          explanation: 'Good move. IT can safely diagnose and resolve hardware issues using proper tools and procedures.'
+        },
+        {
+          id: 'option3',
+          text: 'Ignore the issue unless the device completely stops working',
+          isCorrect: false,
+          explanation: 'Delaying attention can lead to greater damage or data loss. It\'s better to report hardware issues early.'
+        }
+      ]
     }
+  ]
+}
   ];
   
   export const MOCK_BADGES: Badge[] = [
